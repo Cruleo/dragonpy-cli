@@ -8,6 +8,26 @@ Use this at your own risk. I do not take responsibility for any damage caused.
 ## Requirements
 This script is based on [PyUSB](https://github.com/pyusb/pyusb) and therefore requires the dependecies of PyUSB. It was tested on Python 3.11.8.
 
+## Features
+
+- Setting polling rate (up to 1000 Hz with stock dongle, up to 4000 Hz with 4K dongle)
+- Setting debounce delay
+
+## Supported devices
+
+Theoretically it should work with any VGN mouse connected to the 4K and 1K dongle but it hasn't been tested.
+
+| Device name   | VendorID | ProductID |
+|---------------|----------|-----------|
+| VGN 4K Dongle | 3554     | f505      |
+| VXE 1K Dongle | 3554     | f58a      |
+
+## To-Do
+
+- [] Add lift off distance setting (LOD)
+- [] Add idle timer setting
+- [] MotionSync toggle
+
 ## Usage
 
 ``` 
