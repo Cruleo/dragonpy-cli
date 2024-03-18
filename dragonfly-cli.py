@@ -9,20 +9,16 @@ def init():
     parser=argparse.ArgumentParser(description="A Python CLI tool to change polling rate and debounce setting of VGN/VXE Dragonfly mice using the 1K or 4K dongles")
     parser.add_argument("-p","--polling_rate",help="Polling rate to set device to (allowed values: 125, 250, 500, 1000, 2000, 4000)", type=int, choices=[125,250,500,1000,2000,4000])
     parser.add_argument("-d","--debounce", help="Debounce delay to set (allowed values: 0, 1, 2, 4, 8, 15, 20)", type=int, choices=[0,1,2,4,8,15,20])
-    parser.add_argument("--product_id",help="Product ID matching the device (default: f505)", default=62725)
+    parser.add_argument("--product_id",help="Product ID matching the device (default: f505)", type=str, default="f505")
     parser.add_argument("--toggle_ms", help="Toggle MotionSync",choices=["on", "off"], type=str)
     global args
     args=parser.parse_args()
+    args.product_id = int(args.product_id, 16)
 
     
 def main():
     # Get all cmd line arguments
     init()
-    
-    # Default product_id is 4K VGN Dongle, if it has been overwritten, then convert to int
-    if args.product_id != 62725:
-        args.product_id = "0x" + args.product_id
-        args.product_id = int(args.product_id, 16)
     
     global dev
     # Find device with VGN/VXE vendor id and given product id
@@ -62,8 +58,8 @@ def is_polling_rate_valid():
     if polling_rate == None:
         return False
     
-    if (args.product_id == 62858 and polling_rate > 1000):
-        print("1K Dongle detected, only up to 1k polling rate possible!")
+    if (args.product_id != int('f505', 16) and polling_rate > 1000):
+        print("Polling rate over 1000 Hz is only possible with 4K!")
         exit(-1)
         
     match polling_rate:
@@ -73,6 +69,7 @@ def is_polling_rate_valid():
             print("Invalid polling rate!")
             return False
 
+# Check if motion sync toggle is set
 def is_ms_toggle_set():
     if args.toggle_ms == None:
         return False
@@ -94,7 +91,7 @@ def is_debounce_valid():
 def findDevice(idVendor, idProduct):
     dev = usb.core.find(idVendor=idVendor, idProduct=idProduct)
     if dev is None:
-        print("Device not found, try setting and product id")
+        print("Device not found, try setting a product id")
         exit(-1)
     return dev
 
@@ -189,10 +186,10 @@ def setDebounce():
     result = hid_set_report(data)
     if result == 17:
         print("Debounce set to %d" % debounce)
-        
+        time.sleep(0.5)
+ 
+# Turn Motion Sync on or off        
 def toggleMotionSync():
-    # Data Fragment: 08070000a90a 0055 0055 064f00550055ea off
-    # Data Fragment: 08070000a90a 0055 0154 064f00550055ea on
     motionSync = args.toggle_ms
     match motionSync:
         case "on":
@@ -217,6 +214,5 @@ def hid_set_report(report):
         wIndex=1,     # USB interface Number
         data_or_wLength=report # The data payload
     )
-
 if __name__ == '__main__':
     main()
