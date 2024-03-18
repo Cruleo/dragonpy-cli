@@ -24,9 +24,9 @@ Theoretically it should work with any VGN mouse connected to the 4K and 1K dongl
 
 ## To-Do
 
-- [] Add lift off distance setting (LOD)
-- [] Add idle timer setting
-- [] MotionSync toggle
+- [ ] Add lift off distance setting (LOD)
+- [ ] Add idle timer setting
+- [ ] MotionSync toggle
 
 ## Usage
 
