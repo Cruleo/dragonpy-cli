@@ -10,6 +10,7 @@ def init():
     parser.add_argument("-p","--polling_rate",help="Polling rate to set device to (allowed values: 125, 250, 500, 1000, 2000, 4000)", type=int, choices=[125,250,500,1000,2000,4000])
     parser.add_argument("-d","--debounce", help="Debounce delay to set (allowed values: 0, 1, 2, 4, 8, 15, 20)", type=int, choices=[0,1,2,4,8,15,20])
     parser.add_argument("--product_id",help="Product ID matching the device (default: f505)", default=62725)
+    parser.add_argument("--toggle_ms", help="Toggle MotionSync",choices=["on", "off"], type=str)
     global args
     args=parser.parse_args()
 
@@ -28,7 +29,7 @@ def main():
     dev = findDevice(0x3554,args.product_id)
 
     # If no polling rate or debounce settings set, then just end since there is nothing to change
-    if (not is_polling_rate_valid()) and (not is_debounce_valid()):
+    if (not is_polling_rate_valid()) and (not is_debounce_valid()) and (not is_ms_toggle_set()):
         parser.print_usage()
         exit(-1)
     
@@ -45,10 +46,14 @@ def main():
     # If debounce setting valid, then set debounce to set value
     if is_debounce_valid():
         setDebounce()
+        
+    if is_ms_toggle_set():
+        toggleMotionSync()
     
     # Once done with applying settings, release the interfaces and attack the kernel drivers again
     releaseInterfaces(getAmountInterfaces())
     attachKernelDrivers(getAmountInterfaces())
+    usb.util.dispose_resources(dev)
     exit(0)
 
 # This method verifies if the given polling rate argument is valid 
@@ -67,6 +72,11 @@ def is_polling_rate_valid():
         case _:
             print("Invalid polling rate!")
             return False
+
+def is_ms_toggle_set():
+    if args.toggle_ms == None:
+        return False
+    return True
 
 # This method verifies if given debounce setting is valid
 def is_debounce_valid():
@@ -179,6 +189,23 @@ def setDebounce():
     result = hid_set_report(data)
     if result == 17:
         print("Debounce set to %d" % debounce)
+        
+def toggleMotionSync():
+    # Data Fragment: 08070000a90a 0055 0055 064f00550055ea off
+    # Data Fragment: 08070000a90a 0055 0154 064f00550055ea on
+    motionSync = args.toggle_ms
+    match motionSync:
+        case "on":
+            data=[0x08, 0x07, 0x00, 0x00, 0xa9, 0x0a, 0x00, 0x55, 0x01, 0x54, 0x06, 0x4f, 0x00, 0x55, 0x00, 0x55, 0xea]
+        case "off":
+            data=[0x08, 0x07, 0x00, 0x00, 0xa9, 0x0a, 0x00, 0x55, 0x00, 0x55, 0x06, 0x4f, 0x00, 0x55, 0x00, 0x55, 0xea]
+        case _:
+            print("Unexpected MotionSync keyword, exiting")
+            exit(-1)
+    result = hid_set_report(data)
+    if result == 17:
+        print("MotionSync turned %s" % motionSync)
+
     
 # This originally was from https://stackoverflow.com/questions/37943825/send-hid-report-with-pyusb
 # but it wasn't clear on how to setup the data payload   
