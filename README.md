@@ -32,7 +32,7 @@ Theoretically it should work with any VGN mouse connected to the 4K and 1K dongl
 ## Usage
 
 ``` 
-python3 dragonfly-cli.py [-h] [-p {125,250,500,1000,2000,4000}] [-d {0,1,2,4,8,15,20}] [--product_id PRODUCT_ID]
+python3 dragonfly-cli.py [-h] [-p {125,250,500,1000,2000,4000}] [-d {0,1,2,4,8,15,20}] [--product_id PRODUCT_ID] [--toggle_ms {on,off}]
 ```
 
 #### Options
@@ -44,6 +44,8 @@ python3 dragonfly-cli.py [-h] [-p {125,250,500,1000,2000,4000}] [-d {0,1,2,4,8,1
 - -d {0,1,2,4,8,15,20}, --debounce {0,1,2,4,8,15,20}
 
 - --product_id PRODUCT_ID (Required for 1K dongle)
+
+- --toggle_ms {on, off}
 
 To get the product id on Linux, just run `lsusb`. For example, this is the outcome for the 4K VGN dongle:
 
