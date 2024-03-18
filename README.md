@@ -21,6 +21,7 @@ Theoretically it should work with any VGN mouse connected to the 4K and 1K dongl
 |---------------|----------|-----------|
 | VGN 4K Dongle | 3554     | f505      |
 | VXE 1K Dongle | 3554     | f58a      |
+| VXE R1 Pro (Wired) | 3554 | f58c      |
 
 ## To-Do
 
