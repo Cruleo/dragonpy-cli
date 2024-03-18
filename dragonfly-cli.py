@@ -2,6 +2,7 @@ import usb.core
 import usb.util
 import argparse
 import time
+from sys import exit
     
 def init():
     global parser
@@ -158,7 +159,7 @@ def setDebounce():
         # This is unknown if it actually works
         case 0:
             data=[0x08, 0x07, 0x00, 0x00, 0xa9, 0x0a, 0x00, 0x55, 0x01, 0x54, 0x06, 0x4f, 0x00, 0x55, 0x00, 0x55, 0xea]
-            print("Warning: It is unconfirmed wheter it actually sets 0 ms debounce as VHUB's lowest value is 1ms")
+            print("Warning: It is unconfirmed whether it actually sets 0 ms debounce as VHUB's lowest value is 1ms")
         case 1:
             data=[0x08, 0x07, 0x00, 0x00, 0xa9, 0x0a, 0x01, 0x54, 0x01, 0x54, 0x06, 0x4f, 0x00, 0x55, 0x00, 0x55, 0xea]
         case 2:
