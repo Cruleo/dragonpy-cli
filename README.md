@@ -1,4 +1,4 @@
-# dragonfly-cli
+# dragonpy-cli
 A Python CLI tool to change polling rate and debounce setting of VGN/VXE Dragonfly mice using the 1K or 4K dongles
 
 Please note that this has only been tested on Linux and on a VXE Dragonfly R1 Pro along with a 4K and 1K dongle. Your mileage might vary.
