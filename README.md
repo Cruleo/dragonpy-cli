@@ -32,7 +32,7 @@ Theoretically it should work with any VGN mouse connected to the 4K and 1K dongl
 ## Usage
 
 ``` 
-python3 dragonfly-cli.py [-h] [-p {125,250,500,1000,2000,4000}] [-d {0,1,2,4,8,15,20}] [--product_id PRODUCT_ID] [--toggle_ms {on,off}]
+python3 dragonpy-cli.py [-h] [-p {125,250,500,1000,2000,4000}] [-d {0,1,2,4,8,15,20}] [--product_id PRODUCT_ID] [--toggle_ms {on,off}]
 ```
 
 #### Options
